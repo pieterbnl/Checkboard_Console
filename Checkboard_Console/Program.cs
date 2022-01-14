@@ -91,7 +91,7 @@ void GetUserName() {
     // Check for the user's name
     while ((username == null) || (username == "")) {  // note: checking for "" as well, as Enter seems to be registered as a breakline character of sorts
         Console.WriteLine("Before we continue. What's your name?");
-        username = Console.ReadLine();
+        username = Console.ReadLine().ToUpper();
     }
 
     // Applying received input to console output, providing a different greeting depending on the provided name
@@ -114,7 +114,7 @@ void DrawMainMenu() {
         Console.WriteLine("1. Configure my checkerboard");
         Console.WriteLine("2. Draw my checkerboard");
         Console.WriteLine("3. Exit");
-        userMenuSelection = Console.ReadLine();
+        userMenuSelection = Console.ReadLine().ToUpper();
     }
 }
 
@@ -124,29 +124,26 @@ void ConfigureProgram() {
     Console.WriteLine();
     
     Console.WriteLine("What character do you want to use as character 1?");
-    char1 = Console.ReadLine();
+    char1 = Console.ReadLine().ToUpper();
     Console.WriteLine("What character do you want to use as character 2?");
-    char2 = Console.ReadLine();
+    char2 = Console.ReadLine().ToUpper();
     Console.WriteLine("Number of columns?");
-    noOfCols = int.Parse(Console.ReadLine());
+    noOfCols = int.Parse(Console.ReadLine().ToUpper());
     Console.WriteLine("Number of rows?");
-    noOfRows = int.Parse(Console.ReadLine());
+    noOfRows = int.Parse(Console.ReadLine().ToUpper());
 
     // Check if checkboard must be drawn in random colors or not
     randomColor = null;
     while ((randomColor != "Y") && (randomColor != "N")) {
         Console.WriteLine("Draw checkboard in random colors (Y) or not (N)?");
-        randomColor = Console.ReadLine();
+        randomColor = Console.ReadLine().ToUpper();
     }
-
-    Console.WriteLine("CHECK 1");
-       
+   
     // Check if checkboard must be drawn fast or slow
     drawFast = null;
-    while ((drawFast != "F") && (drawFast != "S")) {
-        Console.WriteLine("CHECK 2");
+    while ((drawFast != "F") && (drawFast != "S")) {        
         Console.WriteLine("Draw checkboard fast (F), or slow (S)");
-        drawFast = Console.ReadLine();
+        drawFast = Console.ReadLine().ToUpper();
     }
 
     // Show configuration results
@@ -164,7 +161,7 @@ void ConfigureProgram() {
     // Ask user for confirmation
     while ((userMenuSelection != "A") & (userMenuSelection != "R")) {
         Console.WriteLine("Press A to accept, or R to configure again");
-        userMenuSelection = Console.ReadLine();
+        userMenuSelection = Console.ReadLine().ToUpper();
     }
 
     switch (userMenuSelection) {
@@ -189,33 +186,26 @@ void DrawCheckerboard () {
         for (int j = 0; j < noOfCols; j++) {
 
             // If random color is required, change console text color
-            if (randomColor == "Y")
-            {
+            if (randomColor == "Y") {
                 Random r = new Random();
                 Console.ForegroundColor = (ConsoleColor)r.Next(0, 16);
                 Console.BackgroundColor = (ConsoleColor)r.Next(0, 16);
             }
 
             // Switch character after each newly drawn character
-            if (switchChar == false)
-            {
+            if (switchChar == false) {
                 Console.Write(char1);
                 switchChar = true;
-            }
-            else
-            {
+            } else {
                 Console.Write(char2);
                 switchChar = false;
             }
 
             // Inititate a delay to 'draw' the checkerboard fast or slow
-            if (drawFast == "S")
-            { // slow draw
+            if (drawFast == "S") { // slow draw
                 Thread.Sleep(TimeSpan.FromMilliseconds(100));
-            }
-            else // fast draw
-            {
-                Thread.Sleep(TimeSpan.FromMilliseconds(10));
+            } else { // fast draw
+                Thread.Sleep(TimeSpan.FromMilliseconds(5));
             }
         }
         Console.WriteLine();
@@ -231,11 +221,10 @@ void DrawCheckerboard () {
         Console.WriteLine();
         Console.WriteLine("How do you like your great and fantastic personalized checkerboard?");        
         Console.WriteLine("Press R to redraw or Q to return to the main menu");
-        userMenuSelection = Console.ReadLine();
+        userMenuSelection = Console.ReadLine().ToUpper();
     }
 
-    switch (userMenuSelection)
-    {
+    switch (userMenuSelection) {
         case "Q": // returning to main menu
             //userMenuSelection = null;
             break;
