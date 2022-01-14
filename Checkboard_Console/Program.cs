@@ -16,12 +16,13 @@ Console.WriteLine();
 string username = null;
 string char1 = "X";
 string char2 = "O";
-int noOfRows = 10;
-int noOfCols = 10;
-string drawFast = null;
+int noOfRows = 5;
+int noOfCols = 5;
+string drawFast = "F";
 bool swithChar = false;
+bool randomColor = true;
 
-// Receiving & checking user console input
+/*// Receiving & checking user console input
 Console.WriteLine("Before we start. What's your name?");
 username = Console.ReadLine();
 
@@ -50,7 +51,7 @@ else
 // *****************************************************************************************
 // Part 3: Make a checkerboard in the console, using nested for loops.
 // *****************************************************************************************
-/* 
+*//* 
 With, additionally:
 - allow the user to select the characters for the checkerboard
 - allow the user input the number of rows and columns
@@ -59,7 +60,7 @@ With, additionally:
 
 And as bonus:
 - implement a selection menu
-- refacture your code, taking in account SOLID principles */
+- refacture your code, taking in account SOLID principles *//*
 
 Console.WriteLine();
 Console.WriteLine("Before drawing our checkboard. Some questions.");
@@ -92,7 +93,7 @@ while (drawFast != "F" && drawFast != "S")
             break;
     }
 }
-Console.WriteLine();
+Console.WriteLine();*/
 
 //drawFast = "F";
 Console.WriteLine("Your input: ");
@@ -101,10 +102,21 @@ Console.WriteLine("Char2: " + char2);
 Console.WriteLine("Rows: " + noOfRows);
 Console.WriteLine("Cols: " + noOfCols);
 Console.WriteLine("Fast draw: " + drawFast);
+Console.WriteLine("Random color: " + randomColor);
 
+// Draw checkerboard character by character, by looping through rows and columns 
 for (int i = 0; i < noOfRows; i++)
 {
     for (int j = 0; j < noOfCols; j++) {
+
+        // If random color is required, change console text color
+        if (randomColor = true) {
+            Random r = new Random();
+            Console.ForegroundColor = (ConsoleColor)r.Next(0, 16);
+            Console.BackgroundColor = (ConsoleColor)r.Next(0, 16);
+        }
+
+        // Switch character after each newly drawn character
         if (swithChar == false)
         {
             Console.Write(char1);
@@ -114,7 +126,22 @@ for (int i = 0; i < noOfRows; i++)
         {
             Console.Write(char2);
             swithChar = false;
-        }               
+        }
+
+        // Inititate a delay to 'draw' the checkerboard fast or slow
+        if (drawFast == "S") { // slow draw
+            Thread.Sleep(TimeSpan.FromMilliseconds(100));
+        } 
+        else // fast draw
+        {
+            Thread.Sleep(TimeSpan.FromMilliseconds(1));
+        }        
     }
+
+    // Set colors back to normal
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.BackgroundColor = ConsoleColor.Black;
+
     Console.WriteLine();
+
 }
