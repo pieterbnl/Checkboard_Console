@@ -2,7 +2,7 @@
 // Part 1. Make a simple console app. Make it say what you want.
 // *****************************************************************************************
 
-// Printing some initial console output
+// Printing introductory console output
 Console.WriteLine("**********************");
 Console.WriteLine("Draw me a checkerboard");
 Console.WriteLine("**********************");
@@ -12,28 +12,36 @@ Console.WriteLine();
 // Part 2. Make it accept user input and have it print out something based on that input.
 // *****************************************************************************************
 
-// Setting some variables
+// Setting variables
 string username = null;
+string char1 = "X";
+string char2 = "O";
+int noOfRows = 10;
+int noOfCols = 10;
+string drawFast = null;
+bool swithChar = false;
 
-// Receiving and checking user console input
+// Receiving & checking user console input
 Console.WriteLine("Before we start. What's your name?");
 username = Console.ReadLine();
 
-while (username == ""){  // note: checking for "" rather than null, as Enter seems to be registered as a breakline input
-    Console.WriteLine("Before we can continue, please enter your name.");        
+while (username == "")
+{  // note: checking for "" rather than null, as Enter seems to be registered as a breakline character of sorts
+    Console.WriteLine("Before we can continue, please enter your name.");
     username = Console.ReadLine();
 }
 
-// Applying the received input in console output
-// And providing a different output for some specific names
+// Applying received input to console output, providing a different output for some specific names
 Console.WriteLine();
 if (username == "Patrick")
 {
     Console.WriteLine("Howdy " + username);
-} else if (username == "Niels")
+}
+else if (username == "Niels")
 {
     Console.WriteLine("Hi " + username + ". No snakes please.");
-} else
+}
+else
 {
     Console.WriteLine("Hi there " + username);
 }
@@ -52,3 +60,61 @@ With, additionally:
 And as bonus:
 - implement a selection menu
 - refacture your code, taking in account SOLID principles */
+
+Console.WriteLine();
+Console.WriteLine("Before drawing our checkboard. Some questions.");
+Console.WriteLine("What character do you want to use as character 1?");
+char1 = Console.ReadLine();
+Console.WriteLine("What character do you want to use as character 2?");
+char2 = Console.ReadLine();
+Console.WriteLine("Number of columns?");
+noOfCols = int.Parse(Console.ReadLine());
+Console.WriteLine("Number of rows?");
+noOfRows = int.Parse(Console.ReadLine());
+
+// Check if checkboard must be drawn fast or slow
+// And as long user does not provide correct input, keep asking
+while (drawFast != "F" && drawFast != "S")
+{
+    Console.WriteLine("Draw checkboard fast (F), or slow (S)");
+    drawFast = Console.ReadLine();
+
+    switch (drawFast)
+    {
+        case "F":
+            drawFast = "F";
+            break;
+        case "S":
+            drawFast = "S";
+            break;
+        default:
+            drawFast = null;
+            break;
+    }
+}
+Console.WriteLine();
+
+//drawFast = "F";
+Console.WriteLine("Your input: ");
+Console.WriteLine("Char1: " + char1);
+Console.WriteLine("Char2: " + char2);
+Console.WriteLine("Rows: " + noOfRows);
+Console.WriteLine("Cols: " + noOfCols);
+Console.WriteLine("Fast draw: " + drawFast);
+
+for (int i = 0; i < noOfRows; i++)
+{
+    for (int j = 0; j < noOfCols; j++) {
+        if (swithChar == false)
+        {
+            Console.Write(char1);
+            swithChar = true;
+        }
+        else
+        {
+            Console.Write(char2);
+            swithChar = false;
+        }               
+    }
+    Console.WriteLine();
+}
