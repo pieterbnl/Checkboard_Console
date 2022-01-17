@@ -209,13 +209,23 @@ void DrawCheckerboard () {
             }
 
             // Switch character after each newly drawn character
-            if (switchChar == false) {
+            if (switchChar == false)
+            {
                 Console.Write(char1);
                 switchChar = true;
-            } else {
+            }
+            else
+            {
                 Console.Write(char2);
                 switchChar = false;
             }
+
+            /*// Alternative with use of modulu 
+            if (j % 2 == 0) Console.Write(char1); else Console.Write(char2);
+
+            // Alternative with use of modulu, as a single line ternary operator
+            // CHECK
+            //j % 2 == 0 ? Console.Write(char1) : Console.Write(char2);*/
 
             // Inititate a delay to 'draw' the checkerboard fast or slow
             if (drawFast == "S") { // slow draw
