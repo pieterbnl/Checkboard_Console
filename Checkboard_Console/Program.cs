@@ -37,50 +37,20 @@ InitiateProgram();
 
 void InitiateProgram() {    
 
-    // Draw the program's header
+    // Draw program's header
     DrawHeader();
 
-    // Get the user's name
-    GetUserName();
-    
-    // Draw the program's main menu
-    DrawMainMenu();
-
-    // Handle user main menu selection
-    while (userMenuSelection != "3")
-    {
-        switch (userMenuSelection)
-        {
-            case "1": // Configure checkerboard
-                ConfigureProgram();
-                userMenuSelection = null;
-                DrawHeader();
-                DrawMainMenu();
-                break;
-
-            case "2": // Draw checkerboard
-                DrawCheckerboard();
-                userMenuSelection = null;
-                DrawHeader();
-                DrawMainMenu();
-                break;
-
-            case "3": // Exit program
-                DrawHeader();
-                Console.WriteLine("See you next time " + username + "! Exiting...");
-                Console.WriteLine();
-                Environment.Exit(0);
-                break;
-        }
-    }
+    // Get user's name
+    GetUserName();    
+           
+    // Draw program's menu
+    DrawMainMenu();    
 }
 
 void DrawHeader() {
-    
-    // Clear the console
-    Console.Clear();
 
-    // Draw program header
+    // Clear console and draw the program's header
+    Console.Clear();
     Console.WriteLine("*********************************");
     Console.WriteLine("* NOT YOUR AVERAGE CHECKERBOARD *");
     Console.WriteLine("*********************************");
@@ -88,27 +58,40 @@ void DrawHeader() {
 }
 
 void GetUserName() {
-    // Check for the user's name
-    while ((username == null) || (username == "")) {  // note: checking for "" as well, as Enter seems to be registered as a breakline character of sorts
+    
+    // Check user's name    
+    while (username == null) {  
         Console.WriteLine("Before we continue. What's your name?");
         username = Console.ReadLine().ToUpper();
     }
+}
 
-    // Applying received input to console output, providing a different greeting depending on the provided name
-    DrawHeader();
-    if (username == "Patrick") {
+void GreetUser() {
+
+    // Applying received name input to console output
+    // Providing a different greeting depending on the name
+    if (username == "PATRICK")
+    {
         Console.Write("Howdy " + username + "!");
     }
-    else if (username == "Niels") {
+    else if (username == "NIELS")
+    {
         Console.Write("Hi " + username + "! No snakes here please.");
     }
-    else {
+    else
+    {
         Console.Write("Hi there " + username + "!");
-    }    
+    }
 }
 
 void DrawMainMenu() {
-    while ((userMenuSelection != "1") & (userMenuSelection != "2") & (userMenuSelection != "3")) {
+
+    // (Re-)Draw main menu, while user does not provide an acceptable menu selection
+    // Note use of short circuit-evaluation
+    // Are brackets here according c# coding convention, or may they be left out?
+    while ((userMenuSelection != "1") && (userMenuSelection != "2") && (userMenuSelection != "3")) {        
+        DrawHeader();
+        GreetUser();
         Console.WriteLine(" What do you want to do?");
         Console.WriteLine();
         Console.WriteLine("1. Configure my checkerboard");
@@ -116,21 +99,47 @@ void DrawMainMenu() {
         Console.WriteLine("3. Exit");
         userMenuSelection = Console.ReadLine().ToUpper();
     }
+
+    // Handle the user's menu selection
+    switch (userMenuSelection)
+    {
+        case "1": // Configure checkerboard
+            SetConfiguration();
+            ConfirmConfiguration();
+            userMenuSelection = null;
+            DrawMainMenu();
+            break;
+
+        case "2": // Draw checkerboard
+            DrawCheckerboard();
+            userMenuSelection = null;
+            DrawMainMenu();
+            break;
+
+        case "3": // Exit program                
+            DrawHeader();
+            Console.WriteLine("See you next time " + username + "! Exiting now...\r\n\n");
+            Environment.Exit(0);
+            break;
+    }
 }
 
-void ConfigureProgram() {
+void SetConfiguration() {
+
+    // Redraw header and make clear to user that he's now configuring
     DrawHeader();
     Console.WriteLine("Configuring...");
     Console.WriteLine();
     
+    // Ask user for configuration input (note: purposely not checks on input incorporated)
     Console.WriteLine("What character do you want to use as character 1?");
     char1 = Console.ReadLine().ToUpper();
     Console.WriteLine("What character do you want to use as character 2?");
     char2 = Console.ReadLine().ToUpper();
     Console.WriteLine("Number of columns?");
-    noOfCols = int.Parse(Console.ReadLine().ToUpper());
+    noOfCols = int.Parse(Console.ReadLine().ToUpper()); 
     Console.WriteLine("Number of rows?");
-    noOfRows = int.Parse(Console.ReadLine().ToUpper());
+    noOfRows = int.Parse(Console.ReadLine().ToUpper()); 
 
     // Check if checkboard must be drawn in random colors or not
     randomColor = null;
@@ -145,7 +154,10 @@ void ConfigureProgram() {
         Console.WriteLine("Draw checkboard fast (F), or slow (S)");
         drawFast = Console.ReadLine().ToUpper();
     }
+}
 
+void ConfirmConfiguration()
+{
     // Show configuration results
     DrawHeader();
     Console.WriteLine("Done! Configuration set as following: ");
@@ -159,18 +171,20 @@ void ConfigureProgram() {
     Console.WriteLine();
 
     // Ask user for confirmation
-    while ((userMenuSelection != "A") & (userMenuSelection != "R")) {
+    while ((userMenuSelection != "A") & (userMenuSelection != "R"))
+    {
         Console.WriteLine("Press A to accept, or R to configure again");
         userMenuSelection = Console.ReadLine().ToUpper();
     }
 
-    switch (userMenuSelection) {
+    switch (userMenuSelection)
+    {
         case "A": // returning to main menu           
             userMenuSelection = null;
             break;
         case "R": // re-do configuration
             userMenuSelection = null;
-            ConfigureProgram();
+            SetConfiguration();
             break;
     }
 }
@@ -178,10 +192,12 @@ void ConfigureProgram() {
 // Draw checkerboard character by character, by looping through rows and columns 
 void DrawCheckerboard () {
 
+    // Redraw header and inform user that his checkerboard will now be drawn
     DrawHeader();
     Console.WriteLine("Drawing your checkerboard...");
     Console.WriteLine();
 
+    // Loop through each column and line and draw required character
     for (int i = 0; i < noOfRows; i++) {
         for (int j = 0; j < noOfCols; j++) {
 
