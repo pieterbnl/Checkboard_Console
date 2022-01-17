@@ -23,14 +23,15 @@ And as bonus:
 
 // Setting variables
 string username = null;             // for registering the user's name
-string userMenuSelection = null;    // for registering the user's menu selections
 string char1 = "X";                 // sets character 1 of the checkerboard
 string char2 = "O";                 // sets character 2 of the checkerboard
 int noOfRows = 5;                   // sets no. of rows of the checkerboard
 int noOfCols = 5;                   // sets no. of colums of the checkerboard
 string drawFast = "F";              // sets fast ("F) or slow ("S") drawing of the checkerboard
-string randomColor = "N";          // sets if checkerboard must be drawn in random colors ("Y") or standard ("N")
+string randomColor = "N";           // sets if checkerboard must be drawn in random colors ("Y") or standard ("N")
 bool switchChar = false;            // used for switching between drawing char1 or char2 when being drawn
+bool showMenu = true;               // for tracking if main menu must be shown or not
+string userMenuSelection = null;    // for tracking user's menu selections
 
 // Start the program
 InitiateProgram();
@@ -41,10 +42,10 @@ void InitiateProgram() {
     DrawHeader();
 
     // Get user's name
-    GetUserName();    
-           
-    // Draw program's menu
-    DrawMainMenu();    
+    GetUserName();
+
+    // Draw program's menu    
+    while (showMenu) showMenu = DrawMainMenu();
 }
 
 void DrawHeader() {
@@ -68,7 +69,7 @@ void GetUserName() {
 
 void GreetUser() {
 
-    // Applying received name input to console output
+    // Applying received name input, to console output
     // Providing a different greeting depending on the name
     if (username == "PATRICK")
     {
@@ -84,43 +85,39 @@ void GreetUser() {
     }
 }
 
-void DrawMainMenu() {
+bool DrawMainMenu() {
 
-    // (Re-)Draw main menu, while user does not provide an acceptable menu selection
-    // Note use of short circuit-evaluation
-    // Are brackets here according c# coding convention, or may they be left out?
-    while ((userMenuSelection != "1") && (userMenuSelection != "2") && (userMenuSelection != "3")) {        
-        DrawHeader();
-        GreetUser();
-        Console.WriteLine(" What do you want to do?");
-        Console.WriteLine();
-        Console.WriteLine("1. Configure my checkerboard");
-        Console.WriteLine("2. Draw my checkerboard");
-        Console.WriteLine("3. Exit");
-        userMenuSelection = Console.ReadLine().ToUpper();
-    }
-
+    // (Re-)Draw main menu, while user does not provide an acceptable menu selection    
+    DrawHeader();
+    GreetUser();
+    Console.WriteLine(" What do you want to do?");
+    Console.WriteLine();
+    Console.WriteLine("1. Configure my checkerboard");
+    Console.WriteLine("2. Draw my checkerboard");
+    Console.WriteLine("3. Exit");
+   
     // Handle the user's menu selection
-    switch (userMenuSelection)
+    switch (Console.ReadLine())
     {
         case "1": // Configure checkerboard
-            SetConfiguration();
+            SetConfiguration();            
             ConfirmConfiguration();
-            userMenuSelection = null;
-            DrawMainMenu();
+            return true;
             break;
 
         case "2": // Draw checkerboard
             DrawCheckerboard();
-            userMenuSelection = null;
-            DrawMainMenu();
+            return true;
             break;
 
         case "3": // Exit program                
             DrawHeader();
             Console.WriteLine("See you next time " + username + "! Exiting now...\r\n\n");
             Environment.Exit(0);
-            break;
+            return false; // CHECK - if let out, compiler will complain about not "all code paths return a value", even tho at this point the program is exited already
+            break; // CHECK - if left out, compiler will complain "control can not fall through from one case label", even tho at this point the program is exited already
+        default:
+            return true;
     }
 }
 
@@ -128,37 +125,37 @@ void SetConfiguration() {
 
     // Redraw header and make clear to user that he's now configuring
     DrawHeader();
-    Console.WriteLine("Configuring...");
-    Console.WriteLine();
+    Console.WriteLine("Configuring checkerboard specifics...\r\n");    
     
     // Ask user for configuration input (note: purposely not checks on input incorporated)
-    Console.WriteLine("What character do you want to use as character 1?");
+    Console.WriteLine("What to be used as character 1?");
     char1 = Console.ReadLine().ToUpper();
-    Console.WriteLine("What character do you want to use as character 2?");
+    Console.WriteLine("What to be used as character 2?");
     char2 = Console.ReadLine().ToUpper();
     Console.WriteLine("Number of columns?");
     noOfCols = int.Parse(Console.ReadLine().ToUpper()); 
     Console.WriteLine("Number of rows?");
-    noOfRows = int.Parse(Console.ReadLine().ToUpper()); 
+    noOfRows = int.Parse(Console.ReadLine().ToUpper());
 
     // Check if checkboard must be drawn in random colors or not
-    randomColor = null;
+    // First, reset color setting to nothing
+    randomColor = null; 
     while ((randomColor != "Y") && (randomColor != "N")) {
         Console.WriteLine("Draw checkboard in random colors (Y) or not (N)?");
         randomColor = Console.ReadLine().ToUpper();
     }
-   
+
     // Check if checkboard must be drawn fast or slow
-    drawFast = null;
+    // First, reset drawFast setting to nothing
+    drawFast = null; 
     while ((drawFast != "F") && (drawFast != "S")) {        
         Console.WriteLine("Draw checkboard fast (F), or slow (S)");
         drawFast = Console.ReadLine().ToUpper();
     }
 }
 
-void ConfirmConfiguration()
-{
-    // Show configuration results
+void DisplayConfiguration() {
+    // Display current checkerboard configuration
     DrawHeader();
     Console.WriteLine("Done! Configuration set as following: ");
     Console.WriteLine();
@@ -169,22 +166,25 @@ void ConfirmConfiguration()
     Console.WriteLine("Fast draw: " + drawFast);
     Console.WriteLine("Random color: " + randomColor);
     Console.WriteLine();
+}
 
-    // Ask user for confirmation
-    while ((userMenuSelection != "A") & (userMenuSelection != "R"))
-    {
+void ConfirmConfiguration() {
+    // Ask user to confirm displayed checkerboard configuration, or re-configure
+    while ((userMenuSelection != "A") & (userMenuSelection != "R")) {
+        DisplayConfiguration();
         Console.WriteLine("Press A to accept, or R to configure again");
         userMenuSelection = Console.ReadLine().ToUpper();
     }
 
-    switch (userMenuSelection)
-    {
+    switch (userMenuSelection) {
         case "A": // returning to main menu           
             userMenuSelection = null;
             break;
-        case "R": // re-do configuration
-            userMenuSelection = null;
+        case "R": // re-do configuration            
             SetConfiguration();
+            userMenuSelection = null;
+            DisplayConfiguration();
+            ConfirmConfiguration();
             break;
     }
 }
@@ -209,13 +209,11 @@ void DrawCheckerboard () {
             }
 
             // Switch character after each newly drawn character
-            if (switchChar == false)
-            {
+            if (switchChar == false) {
                 Console.Write(char1);
                 switchChar = true;
             }
-            else
-            {
+            else {
                 Console.Write(char2);
                 switchChar = false;
             }
