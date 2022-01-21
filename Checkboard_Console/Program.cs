@@ -22,7 +22,7 @@ And as bonus:
 
 
 // Setting variables
-string username = null;             // for registering the user's name
+string username = "";             // for registering the user's name
 string char1 = "X";                 // sets character 1 of the checkerboard
 string char2 = "O";                 // sets character 2 of the checkerboard
 int noOfRows = 5;                   // sets no. of rows of the checkerboard
@@ -31,7 +31,7 @@ string drawFast = "F";              // sets fast ("F) or slow ("S") drawing of t
 string randomColor = "N";           // sets if checkerboard must be drawn in random colors ("Y") or standard ("N")
 bool switchChar = false;            // used for switching between drawing char1 or char2 when being drawn
 bool showMenu = true;               // for tracking if main menu must be shown or not
-string userMenuSelection = null;    // for tracking user's menu selections
+string userMenuSelection = "";    // for tracking user's menu selections
 
 // Start the program
 InitiateProgram();
@@ -67,24 +67,6 @@ void GetUserName() {
     }
 }
 
-void GreetUser() {
-
-    // Applying received name input, to console output
-    // Providing a different greeting depending on the name
-    if (username == "PATRICK")
-    {
-        Console.Write("Howdy " + username + "!");
-    }
-    else if (username == "NIELS")
-    {
-        Console.Write("Hi " + username + "! No snakes here please.");
-    }
-    else
-    {
-        Console.Write("Hi there " + username + "!");
-    }
-}
-
 bool DrawMainMenu() {
 
     // (Re-)Draw main menu, while user does not provide an acceptable menu selection    
@@ -102,22 +84,35 @@ bool DrawMainMenu() {
         case "1": // Configure checkerboard
             SetConfiguration();            
             ConfirmConfiguration();
-            return true;
-            break;
+            return true;            
 
         case "2": // Draw checkerboard
             DrawCheckerboard();
-            return true;
-            break;
+            return true;            
 
         case "3": // Exit program                
             DrawHeader();
             Console.WriteLine("See you next time " + username + "! Exiting now...\r\n\n");
             Environment.Exit(0);
-            return false; // CHECK - if let out, compiler will complain about not "all code paths return a value", even tho at this point the program is exited already
-            break; // CHECK - if left out, compiler will complain "control can not fall through from one case label", even tho at this point the program is exited already
+            return false; 
+
         default:
             return true;
+    }
+}
+
+void GreetUser()
+{
+    // Applying received name input, to console output
+    // Providing a different greeting depending on the name
+    if (username == "PATRICK") {
+        Console.Write("Howdy " + username + "!");
+    }
+    else if (username == "NIELS") {
+        Console.Write("Hi " + username + "! No snakes here please.");
+    }
+    else {
+        Console.Write("Hi there " + username + "!");
     }
 }
 
@@ -133,9 +128,9 @@ void SetConfiguration() {
     Console.WriteLine("What to be used as character 2?");
     char2 = Console.ReadLine().ToUpper();
     Console.WriteLine("Number of columns?");
-    noOfCols = int.Parse(Console.ReadLine().ToUpper()); 
+    noOfCols = int.Parse(Console.ReadLine()); 
     Console.WriteLine("Number of rows?");
-    noOfRows = int.Parse(Console.ReadLine().ToUpper());
+    noOfRows = int.Parse(Console.ReadLine());
 
     // Check if checkboard must be drawn in random colors or not
     // First, reset color setting to nothing
@@ -218,12 +213,12 @@ void DrawCheckerboard () {
                 switchChar = false;
             }
 
-            /*// Alternative with use of modulu 
+            // Alternative with use of modulu 
             if (j % 2 == 0) Console.Write(char1); else Console.Write(char2);
 
             // Alternative with use of modulu, as a single line ternary operator
-            // CHECK
-            //j % 2 == 0 ? Console.Write(char1) : Console.Write(char2);*/
+            // REPHRASE
+            // j % 2 == 0 ? Console.Write(char1) : Console.Write(char2);*
 
             // Inititate a delay to 'draw' the checkerboard fast or slow
             if (drawFast == "S") { // slow draw
