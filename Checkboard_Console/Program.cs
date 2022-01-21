@@ -214,7 +214,7 @@ void DrawCheckerboard () {
             }
 
             // Alternative with use of modulu 
-            if (j % 2 == 0) Console.Write(char1); else Console.Write(char2);
+            // if (j % 2 == 0) Console.Write(char1); else Console.Write(char2);
 
             // Alternative with use of modulu, as a single line ternary operator
             // REPHRASE
